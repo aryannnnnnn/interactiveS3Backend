@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { type ZodType, ZodError } from "zod";
+import { type ZodType } from "zod";
+import { errorHandler } from "../services/error.service.js";
 
 export const validator = (
   schemaType: "query" | "body" | "params",
@@ -10,20 +11,8 @@ export const validator = (
       schema.parse(req[schemaType]);
       next();
     } catch (Error) {
-      console.log(Error);
-      if (Error instanceof ZodError) {
-        res.status(422).json({
-          msg: "Error",
-          ErrorType: "ValidationError",
-          data: Error.issues.map((e) => e.message),
-        });
-      } else {
-        res.status(400).json({
-          msg: "Error",
-          ErrorType: "UnknownError",
-          data: Error,
-        });
-      }
+      const resp = errorHandler(Error);
+      res.status(resp.status || 404).json(resp);
     }
   };
 };

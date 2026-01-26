@@ -5,6 +5,7 @@ import type { jwtDecoded } from "../Intefaces/app.Interface.js";
 import { S3Client } from "@aws-sdk/client-s3";
 import * as z from "zod";
 import type { loginSchema } from "../schema/zod.schema.js";
+import { errorHandler } from "../services/error.service.js";
 
 export const authCheck = (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -30,10 +31,7 @@ export const authCheck = (req: Request, res: Response, next: NextFunction) => {
     });
     next();
   } catch (Error) {
-    res.status(401).json({
-      msg: "Error",
-      data: "Invalid Access Token",
-      Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };

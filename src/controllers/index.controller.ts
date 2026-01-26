@@ -11,7 +11,6 @@ import {
   type ListBucketsCommandOutput,
   type ListObjectsV2CommandOutput,
   type DeleteObjectCommandOutput,
-  S3ServiceException,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
@@ -24,7 +23,7 @@ import {
 import * as z from "zod";
 import jwt from "jsonwebtoken";
 import { encrypt } from "../services/crypto.service.js";
-import type { serverError } from "../Intefaces/app.Interface.js";
+import { errorHandler } from "../services/error.service.js";
 
 export const handleGetBucket = async (req: Request, res: Response) => {
   try {
@@ -40,10 +39,8 @@ export const handleGetBucket = async (req: Request, res: Response) => {
     }
     res.json({});
   } catch (Error) {
-    res.status(404).json({
-      msg: "Error",
-      Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };
 
@@ -80,10 +77,8 @@ export const handleFiles = async (req: Request, res: Response) => {
     }
     res.json({});
   } catch (Error) {
-    res.status(404).json({
-      msg: "Error",
-      Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };
 
@@ -111,10 +106,8 @@ export const handleDeleteFile = async (req: Request, res: Response) => {
       data: "Unable to Delete File",
     });
   } catch (Error) {
-    res.status(404).json({
-      msg: "Error",
-      Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };
 
@@ -145,10 +138,8 @@ export const handleViewFile = async (req: Request, res: Response) => {
       signedUrlList.map((obj) => (obj.status == "fulfilled" ? obj.value : {})),
     );
   } catch (Error) {
-    res.status(404).json({
-      msg: "Error",
-      Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };
 
@@ -179,10 +170,8 @@ export const handleGetUploadFileUrl = async (req: Request, res: Response) => {
       signedUrlList.map((obj) => (obj.status == "fulfilled" ? obj.value : {})),
     );
   } catch (Error) {
-    res.status(404).json({
-      msg: "Error",
-      Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };
 
@@ -214,19 +203,7 @@ export const handleLogin = async (req: Request, res: Response) => {
     );
     res.json({ token: token });
   } catch (Error) {
-    if (Error instanceof S3ServiceException) {
-      const serverErr: serverError = {
-        status: Error.$metadata.httpStatusCode || 403,
-        code: Error.name,
-        error: Error.stack,
-        message: Error.message,
-        timestamp: new Date(),
-      };
-      res.status(serverErr.status || 403).json(serverErr);
-    }
-    res.status(404).json({
-      msg: "Error",
-      data: Error,
-    });
+    const resp = errorHandler(Error);
+    res.status(resp.status || 404).json(resp);
   }
 };

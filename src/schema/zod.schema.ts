@@ -1,5 +1,4 @@
 import * as z from "zod";
-import { vi } from "zod/locales";
 
 export const getFilesSchema = z
   .object({
@@ -47,13 +46,6 @@ export const uploadFileSchema = z
     files: true,
   });
 
-export default {
-  deleteFileSchema,
-  getFilesSchema,
-  uploadFileSchema,
-  viewFileSchema,
-};
-
 export const loginSchema = z
   .object({
     username: z.string(),
@@ -62,3 +54,11 @@ export const loginSchema = z
     region: z.string(),
   })
   .required();
+
+export default {
+  deleteFileSchema,
+  getFilesSchema,
+  uploadFileSchema,
+  viewFileSchema,
+  loginSchema,
+};

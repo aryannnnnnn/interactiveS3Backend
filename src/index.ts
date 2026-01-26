@@ -5,11 +5,10 @@ import routes from "./routes/index.routes.js";
 import * as crypto from "crypto";
 
 const app = express();
-const encryptionKey = crypto
+crypto
   .createHash("sha256")
   .update(process.env.ENCRYPTION_SECRET_TOKEN!)
   .digest();
-// console.log(process.env.JWT_SECRET_TOKEN);
 
 app.router.use(routes);
 
