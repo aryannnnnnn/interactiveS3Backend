@@ -38,7 +38,7 @@ export const uploadFileSchema = z
         key: z.string(),
         contentType: z.string(),
         expiresIn: z.number().default(900),
-      }),
+      })
     ),
   })
   .required({

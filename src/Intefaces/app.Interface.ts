@@ -22,9 +22,14 @@ export interface jwtDecoded {
 export interface serverError {
   status: number | undefined;
   error: string | undefined;
-  message: string | undefined;
+  message: string | messageError[] | undefined;
   code: string | undefined;
   timestamp: Date | undefined;
+}
+
+export interface messageError {
+  field: string,
+  message: string
 }
 
 declare global {

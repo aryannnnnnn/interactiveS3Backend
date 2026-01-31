@@ -1,10 +1,5 @@
 import * as crypto from "crypto";
 
-// const encryptionKey = crypto
-//   .createHash("sha256")
-//   .update(process.env.ENCRYPTION_SECRET_TOKEN!)
-//   .digest();
-
 export const encrypt = (payload: string) => {
   const encryptionKey = String(process.env.ENCRYPTION_SECRET_TOKEN);
   const iv = crypto.randomBytes(16);

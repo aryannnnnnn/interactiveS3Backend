@@ -1,4 +1,5 @@
-import type { serverError } from "../Intefaces/app.Interface.js";
+import { ZodError } from "zod";
+import type { serverError, messageError } from "../Intefaces/app.Interface.js";
 import { S3ServiceException } from "@aws-sdk/client-s3";
 
 export const errorHandler = (
@@ -14,11 +15,24 @@ export const errorHandler = (
     };
     return serverErr;
   }
+  else if (Error instanceof ZodError) {
+    console.log(Error.issues)
+    const serverErr: serverError = {
+      status: 422,
+      code: "ValidationError",
+      message: Error.issues
+        .map((E): messageError => { return { field: E.path.join(','), message: E.message } }),
+      error: Error.message,
+      timestamp: new Date(),
+
+    }
+    return serverErr;
+  }
   const serverErr: serverError = {
     status: 404,
     code: "Error",
-    error: JSON.stringify(Error),
     message: JSON.stringify(Error),
+    error: JSON.stringify(Error),
     timestamp: new Date(),
   };
   return serverErr;

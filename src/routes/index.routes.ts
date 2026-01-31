@@ -12,11 +12,10 @@ routeList.forEach((route) => {
 
   route.method == "post" ? middlewares.push(json()) : null;
 
-  // route.authRequired ?  : ;
   route.schemaConfig
     ? middlewares.push(
-        validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
-      )
+      validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
+    )
     : null;
 
   route.authRequired ? middlewares.push(authCheck) : null;
@@ -30,8 +29,8 @@ authRouteList.forEach((route) => {
 
   route.schemaConfig
     ? middlewares.push(
-        validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
-      )
+      validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
+    )
     : null;
 
   return router[route.method](route.route, ...middlewares, route.handler);

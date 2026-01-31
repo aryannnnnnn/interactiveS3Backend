@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { decrypt } from "../services/crypto.service.js";
 import jwt from "jsonwebtoken";
-import type { jwtDecoded } from "../Intefaces/app.Interface.js";
+import type { jwtDecoded, serverError } from "../Intefaces/app.Interface.js";
 import { S3Client } from "@aws-sdk/client-s3";
 import * as z from "zod";
 import type { loginSchema } from "../schema/zod.schema.js";
@@ -11,9 +11,12 @@ export const authCheck = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.headers.authorization) {
       res.status(401).json({
-        msg: "Unauthorized",
-        data: "Invalid Access Token",
-      });
+        status: 401,
+        code: "AuthorizationError",
+        message: "Please Provide Valid Credentials",
+        error: "Plase Provide Valid Credentials",
+        timestamp: new Date()
+      } as serverError);
       return;
     }
     const jwtToken: string = String(process.env.JWT_SECRET_TOKEN);
