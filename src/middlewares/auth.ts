@@ -15,7 +15,7 @@ export const authCheck = (req: Request, res: Response, next: NextFunction) => {
         code: "AuthorizationError",
         message: "Please Provide Valid Credentials",
         error: "Plase Provide Valid Credentials",
-        timestamp: new Date()
+        timestamp: new Date(),
       } as serverError);
       return;
     }
@@ -33,8 +33,8 @@ export const authCheck = (req: Request, res: Response, next: NextFunction) => {
       },
     });
     next();
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };

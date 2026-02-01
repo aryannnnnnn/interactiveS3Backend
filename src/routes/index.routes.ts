@@ -8,14 +8,14 @@ import { authCheck } from "../middlewares/auth.js";
 const router = Router();
 
 routeList.forEach((route) => {
-  let middlewares = [];
+  const middlewares = [];
 
-  route.method == "post" ? middlewares.push(json()) : null;
+  route.method === "post" ? middlewares.push(json()) : null;
 
   route.schemaConfig
     ? middlewares.push(
-      validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
-    )
+        validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
+      )
     : null;
 
   route.authRequired ? middlewares.push(authCheck) : null;
@@ -23,14 +23,14 @@ routeList.forEach((route) => {
 });
 
 authRouteList.forEach((route) => {
-  let middlewares = [];
+  const middlewares = [];
 
   middlewares.push(json());
 
   route.schemaConfig
     ? middlewares.push(
-      validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
-    )
+        validator(route.schemaConfig.schemaType, route.schemaConfig.schema),
+      )
     : null;
 
   return router[route.method](route.route, ...middlewares, route.handler);

@@ -38,8 +38,8 @@ export const handleGetBucket = async (req: Request, res: Response) => {
       return;
     }
     res.json({});
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };
@@ -76,8 +76,8 @@ export const handleFiles = async (req: Request, res: Response) => {
       return;
     }
     res.json({});
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };
@@ -105,8 +105,8 @@ export const handleDeleteFile = async (req: Request, res: Response) => {
       msg: "Unknown",
       data: "Unable to Delete File",
     });
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };
@@ -135,10 +135,10 @@ export const handleViewFile = async (req: Request, res: Response) => {
     signedUrlList = await Promise.allSettled(promises);
 
     res.json(
-      signedUrlList.map((obj) => (obj.status == "fulfilled" ? obj.value : {})),
+      signedUrlList.map((obj) => (obj.status === "fulfilled" ? obj.value : {})),
     );
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };
@@ -167,10 +167,10 @@ export const handleGetUploadFileUrl = async (req: Request, res: Response) => {
     signedUrlList = await Promise.allSettled(promises);
 
     res.json(
-      signedUrlList.map((obj) => (obj.status == "fulfilled" ? obj.value : {})),
+      signedUrlList.map((obj) => (obj.status === "fulfilled" ? obj.value : {})),
     );
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };
@@ -202,8 +202,8 @@ export const handleLogin = async (req: Request, res: Response) => {
       },
     );
     res.json({ token: token });
-  } catch (Error) {
-    const resp = errorHandler(Error);
+  } catch (e) {
+    const resp = errorHandler(e);
     res.status(resp.status || 404).json(resp);
   }
 };

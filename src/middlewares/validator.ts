@@ -10,8 +10,8 @@ export const validator = (
     try {
       schema.parse(req[schemaType]);
       next();
-    } catch (Error) {
-      const resp = errorHandler(Error);
+    } catch (e) {
+      const resp = errorHandler(e);
       res.status(resp.status || 404).json(resp);
     }
   };
